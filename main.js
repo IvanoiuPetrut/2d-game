@@ -1,4 +1,5 @@
 import Sprite from "./sprite.js";
+import { move, stop } from "./movement.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -8,17 +9,10 @@ canvas.height = 720;
 
 const player = new Sprite({
   position: { x: 100, y: 100 },
-  velocity: { x: 0, y: 0 },
+  velocity: { x: 0, y: 1 },
 });
 
-console.log("before player.draw()");
 player.draw(ctx);
-console.log("after player.draw()");
-
-function update(object) {
-  object.position.x += object.velocity.x;
-  object.position.y += object.velocity.y;
-}
 
 function render() {
   ctx.fillStyle = "black";
@@ -27,19 +21,32 @@ function render() {
 }
 
 function loop() {
-  update(player);
-  render();
   requestAnimationFrame(loop);
+  player.update(7);
+  render();
 }
 
 loop();
 
 // move the player left and right
-document.addEventListener("keydown", (event) => {
-  if (event.key === "ArrowLeft") {
-    player.velocity.x = -10;
+window.addEventListener("keydown", (event) => {
+  switch (event.key) {
+    case "d":
+      move(player, 1, 2, 2);
+      break;
+    case "a":
+      move(player, -1, 2, 2);
+      break;
   }
-  if (event.key === "ArrowRight") {
-    player.velocity.x = 10;
+});
+
+window.addEventListener("keyup", (event) => {
+  switch (event.key) {
+    case "d":
+      stop(player);
+      break;
+    case "a":
+      stop(player);
+      break;
   }
 });
