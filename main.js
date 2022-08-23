@@ -1,32 +1,19 @@
+import Sprite from "./sprite.js";
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = 1280;
 canvas.height = 720;
-console.log(canvas.width);
-
-// fill rect
-ctx.fillStyle = "darkblue";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-class Sprite {
-  constructor({ position, velocity }) {
-    this.position = position;
-    this.velocity = velocity;
-  }
-
-  draw() {
-    ctx.fillStyle = "white";
-    ctx.fillRect(this.position.x, this.position.y, 50, 50);
-  }
-}
 
 const player = new Sprite({
   position: { x: 100, y: 100 },
-  velocity: { x: 0, y: 10 },
+  velocity: { x: 0, y: 0 },
 });
 
-player.draw();
+console.log("before player.draw()");
+player.draw(ctx);
+console.log("after player.draw()");
 
 function update(object) {
   object.position.x += object.velocity.x;
@@ -36,7 +23,7 @@ function update(object) {
 function render() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  player.draw();
+  player.draw(ctx);
 }
 
 function loop() {
@@ -46,3 +33,13 @@ function loop() {
 }
 
 loop();
+
+// move the player left and right
+document.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") {
+    player.velocity.x = -10;
+  }
+  if (event.key === "ArrowRight") {
+    player.velocity.x = 10;
+  }
+});
