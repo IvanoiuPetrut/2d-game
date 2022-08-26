@@ -10,11 +10,8 @@ export function stop(object) {
 }
 
 export function jump(object, jumpSpeed) {
-  if (object.isOnGround()) {
-    object.velocity.y += jumpSpeed;
-    console.log(object.velocity.y);
-  }
-  // object.velocity.y = 0;
+  object.velocity.y += jumpSpeed;
+  // console.log(object.velocity.y);
 }
 
 export function gravity(object, gravity = 0.2) {
