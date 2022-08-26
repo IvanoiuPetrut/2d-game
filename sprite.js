@@ -10,14 +10,9 @@ export default class Sprite {
     context.fillRect(this.position.x, this.position.y, 50, this.height);
   }
 
-  update(gravity = 0.2) {
-    console.log(this.velocity.y);
+  update() {
     this.position.x += this.velocity.x;
-    this.position.y += this.velocity.y * gravity;
-    if (this.isOnGround()) {
-      this.position.y = 720 - this.height;
-      this.velocity.y = 0;
-    }
+    this.position.y += this.velocity.y;
   }
 
   isOnGround() {

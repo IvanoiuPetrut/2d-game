@@ -1,5 +1,5 @@
 import Sprite from "./sprite.js";
-import { move, stop } from "./movement.js";
+import { move, stop, jump, gravity } from "./movement.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -9,7 +9,7 @@ canvas.height = 720;
 
 const player = new Sprite({
   position: { x: 100, y: 100 },
-  velocity: { x: 0, y: 1 },
+  velocity: { x: 0, y: 0 },
 });
 
 player.draw(ctx);
@@ -22,7 +22,9 @@ function render() {
 
 function loop() {
   requestAnimationFrame(loop);
-  player.update(7);
+
+  gravity(player);
+  player.update();
   render();
 }
 
@@ -32,10 +34,15 @@ loop();
 window.addEventListener("keydown", (event) => {
   switch (event.key) {
     case "d":
-      move(player, 1, 2, 2);
+      move(player, 1, 7, 7);
       break;
     case "a":
-      move(player, -1, 2, 2);
+      move(player, -1, 7, 7);
+      console.log(player.position.y, player.height, player.velocity.y);
+      break;
+    case "w":
+      console.log("jump");
+      jump(player, -10);
       break;
   }
 });
