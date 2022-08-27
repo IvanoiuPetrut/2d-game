@@ -3,7 +3,7 @@ import { move, stop, jump, gravity, isOnGround } from "./movement.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-let jumpCount = 0;
+let doubleJump = false;
 
 canvas.width = 1280;
 canvas.height = 720;
@@ -24,6 +24,9 @@ function render() {
 function loop() {
   requestAnimationFrame(loop);
 
+  if (isOnGround(player, 720)) {
+    doubleJump = false;
+  }
   gravity(player);
   player.update();
   render();
@@ -41,19 +44,10 @@ window.addEventListener("keydown", (event) => {
       move(player, -1, 7, 7);
       break;
     case "w":
-      console.log("1 step " + jumpCount);
-      if (!isOnGround(player, 720) && jumpCount === 1) {
+      if (isOnGround(player, 720) || doubleJump) {
         jump(player, -10);
-        console.log("2 step " + jumpCount);
-        jumpCount = 0;
-        console.log("3 step " + jumpCount);
+        doubleJump = !doubleJump;
       }
-      if (isOnGround(player, 720)) {
-        jump(player, -10);
-      }
-      jumpCount++;
-      console.log("4 step " + jumpCount);
-      break;
   }
 });
 
