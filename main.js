@@ -4,6 +4,14 @@ import { move, stop, jump, gravity, isOnGround } from "./movement.js";
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let doubleJump = false;
+let gunOffset = {
+  x: 20,
+  y: 30,
+  function: function (x, y) {
+    this.x = x;
+    this.y = y;
+  },
+};
 
 canvas.width = 1280;
 canvas.height = 720;
@@ -11,6 +19,19 @@ canvas.height = 720;
 const player = new Sprite({
   position: { x: 100, y: 100 },
   velocity: { x: 0, y: 0 },
+  width: 50,
+  height: 150,
+  img: new Image(),
+  imgSrc: "./images/player.png",
+});
+
+const playerGun = new Sprite({
+  position: { x: player.position.x, y: player.position.y },
+  velocity: { x: 0, y: 0 },
+  width: 50,
+  height: 50,
+  img: new Image(),
+  imgSrc: "./images/player_gun.png",
 });
 
 player.draw(ctx);
@@ -19,6 +40,7 @@ function render() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   player.draw(ctx);
+  playerGun.draw(ctx);
 }
 
 function loop() {
@@ -29,6 +51,7 @@ function loop() {
   }
   gravity(player);
   player.update();
+  playerGun.followObject(player, gunOffset.x, gunOffset.y);
   render();
 }
 
@@ -59,5 +82,14 @@ window.addEventListener("keyup", (event) => {
     case "a":
       stop(player);
       break;
+  }
+});
+
+// find mouse position
+window.addEventListener("mousemove", (event) => {
+  if (event.clientX > player.position.x) {
+    player.unflipSprite();
+  } else {
+    player.flipSprite();
   }
 });
