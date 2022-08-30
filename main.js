@@ -5,11 +5,11 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let doubleJump = false;
 let gunOffset = {
-  x: 20,
-  y: 30,
-  function: function (x, y) {
-    this.x = x;
-    this.y = y;
+  x: 0,
+  y: 0,
+  lookingAt: function (x, y, maxX, minX, maxY, minY) {
+    x > maxX ? (this.x = maxX) : x < minX ? (this.x = minX) : (this.x = x);
+    y > maxY ? (this.y = maxY) : y < minY ? (this.y = minY) : (this.y = y);
   },
 };
 
@@ -92,4 +92,13 @@ window.addEventListener("mousemove", (event) => {
   } else {
     player.flipSprite();
   }
+  gunOffset.lookingAt(
+    event.clientX - player.position.x - player.width,
+    event.clientY - player.position.y - player.height / 2,
+    player.width,
+    -player.width,
+    player.height / 2,
+    -25
+  );
+  console.log(gunOffset.x, gunOffset.y);
 });
