@@ -1,8 +1,11 @@
 import Sprite from "./sprite.js";
 import { move, stop, jump, gravity, isOnGround } from "./movement.js";
+import { angle } from "./helper.js";
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+let mouseX = 0;
+let mouseY = 0;
 let doubleJump = false;
 let gunOffset = {
   x: 0,
@@ -30,6 +33,7 @@ const playerGun = new Sprite({
   velocity: { x: 0, y: 0 },
   width: 50,
   height: 50,
+  angle: 0,
   img: new Image(),
   imgSrc: "./images/player_gun.png",
 });
@@ -51,6 +55,7 @@ function loop() {
   }
   gravity(player);
   player.update();
+  playerGun.angle = angle(player.position.x, player.position.y, mouseX, mouseY);
   playerGun.followObject(player, gunOffset.x, gunOffset.y);
   render();
 }
@@ -87,6 +92,8 @@ window.addEventListener("keyup", (event) => {
 
 // find mouse position
 window.addEventListener("mousemove", (event) => {
+  mouseX = event.clientX - canvas.offsetLeft;
+  mouseY = event.clientY - canvas.offsetTop;
   if (event.clientX > player.position.x) {
     player.unflipSprite();
   } else {
@@ -96,7 +103,7 @@ window.addEventListener("mousemove", (event) => {
     event.clientX - player.position.x - player.width,
     event.clientY - player.position.y - player.height / 2,
     player.width,
-    -player.width,
+    -player.width + playerGun.width,
     player.height / 2,
     -25
   );

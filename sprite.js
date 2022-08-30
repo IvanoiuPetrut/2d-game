@@ -1,21 +1,36 @@
 export default class Sprite {
-  constructor({ position, velocity, width, height, img, imgSrc }) {
+  constructor({ position, velocity, width, height, angle = 0, img, imgSrc }) {
     this.position = position;
     this.velocity = velocity;
     this.height = height;
     this.width = width;
+    this.angle = angle;
     this.img = img || new Image();
     this.img.src = imgSrc;
   }
 
   draw(context) {
-    context.drawImage(
-      this.img,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
+    if (this.angle > 0) {
+      context.save();
+      context.translate(this.position.x, this.position.y);
+      context.rotate((this.angle * Math.PI) / 180);
+      context.drawImage(
+        this.img,
+        -this.width / 2,
+        -this.height / 2,
+        this.width,
+        this.height
+      );
+      context.restore();
+    } else {
+      context.drawImage(
+        this.img,
+        this.position.x,
+        this.position.y,
+        this.width,
+        this.height
+      );
+    }
   }
 
   update() {
